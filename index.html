@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STRAFE 1.6 — de_dunes</title>
 <link rel="stylesheet" href="style.css">
-<script type="importmap">
-{ "imports": { "three": "./lib/three.module.min.js" } }
-</script>
 </head>
 <body>
 <div id="game"></div>
@@ -188,6 +185,24 @@
   <div id="conSug" class="hidden"></div>
 </div>
 
+<script>
+// Shows a readable message if the game can't start in this browser (instead of dead menus).
+(function () {
+  var shown = false;
+  function fail(msg) {
+    if (shown || window.__game) return; shown = true;
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;left:50%;top:20px;transform:translateX(-50%);z-index:99;max-width:640px;background:#4c5844;color:#d8ded3;border:1px solid #889180;padding:14px 18px;font:13px Tahoma,Verdana,sans-serif;line-height:1.5';
+    d.innerHTML = '<b style="color:#c4b550">The game could not start in this browser.</b><br>' +
+      'Try updating your browser (Firefox 115 or newer, Chrome or Edge), and make sure hardware acceleration / WebGL is turned on.<br>' +
+      '<span style="opacity:.7">Error: ' + String(msg).replace(/</g, '&lt;') + '</span>';
+    document.body.appendChild(d);
+  }
+  window.addEventListener('error', function (e) { fail(e.message || (e.target && e.target.src ? 'could not load ' + e.target.src : 'unknown error')); }, true);
+  window.addEventListener('unhandledrejection', function (e) { fail(e.reason && e.reason.message || e.reason); });
+  window.addEventListener('load', function () { setTimeout(function () { if (!window.__game) fail('the game script did not load (your browser may be too old to run JavaScript modules)'); }, 4000); });
+})();
+</script>
 <script type="module" src="game.js"></script>
 </body>
 </html>

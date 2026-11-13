@@ -1,6 +1,6 @@
 // STRAFE 1.6 — a tiny GoldSrc-style shooter in the browser.
 // Units are "Hammer units" like the original engine: player is 32x72, runs 250 u/s.
-import * as THREE from 'three';
+import * as THREE from './lib/three.module.min.js';
 
 /* ============================================================
    SETTINGS + TUNABLE PHYSICS (most are console cvars)
