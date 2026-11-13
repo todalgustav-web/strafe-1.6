@@ -62,7 +62,10 @@
   <div class="mm-sub">de_dunes</div>
   <nav>
     <a id="mmResume" class="hidden">Resume Game</a>
-    <a id="mmNew">New Game</a>
+    <a id="mmFind">Find Servers</a>
+    <a id="mmCreate">Create Server</a>
+    <a id="mmNew">Practice vs Bots</a>
+    <a id="mmLeave" class="hidden">Disconnect</a>
     <a id="mmTeam" class="hidden">Change Team</a>
     <a id="mmOptions">Options</a>
     <a id="mmCrosshair">Crosshair</a>
@@ -137,6 +140,44 @@
   <div class="win-body" id="xhBody"></div>
   <div class="xh-code"><input id="xhCode" type="text" spellcheck="false"><button id="xhCopy">Copy</button><button id="xhApply">Apply</button></div>
   <div class="win-foot"><button data-close="xhwin">OK</button></div>
+</div>
+
+
+<!-- ================= MULTIPLAYER ================= -->
+<div id="browser" class="vgui win hidden">
+  <div class="title">Find Servers<span class="x" data-close="browser">×</span></div>
+  <div class="win-body">
+    <div class="mp-row">
+      <label>Your name<input id="mpName" type="text" maxlength="24"></label>
+      <label>Network<select id="mpNet"><option value="online">Internet</option><option value="local">This browser only (test with 2 tabs)</option></select></label>
+    </div>
+    <div class="srv-wrap"><table id="srvTable"><thead><tr><th>Server</th><th>Players</th><th>Map</th><th>Score</th></tr></thead><tbody id="srvList"></tbody></table></div>
+    <p id="srvStatus" class="note"></p>
+    <p class="note">Servers are hosted by other players' browsers. Double-click a server or select it and press Join. Bots fill every empty slot.</p>
+  </div>
+  <div class="win-foot"><button id="srvRefresh">Refresh</button> <button id="srvJoin">Join</button> <button data-close="browser">Close</button></div>
+</div>
+
+<div id="create" class="vgui win hidden">
+  <div class="title">Create Server<span class="x" data-close="create">×</span></div>
+  <div class="win-body">
+    <label>Server name<input id="crName" type="text" maxlength="32"></label>
+    <label>Players per team <output id="crSizeOut"></output><input id="crSize" type="range" min="1" max="5" step="1"></label>
+    <label class="row">Bot difficulty
+      <select id="crDiff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select>
+    </label>
+    <label class="row">Network
+      <select id="crNet"><option value="online">Internet</option><option value="local">This browser only (test with 2 tabs)</option></select>
+    </label>
+    <p class="note">Your browser runs the server. Bots fill every empty slot, and a bot steps aside when a player joins. Keep this tab open (and preferably visible) while people are playing.</p>
+  </div>
+  <div class="win-foot"><button id="crStart">Start Server</button> <button data-close="create">Cancel</button></div>
+</div>
+
+<div id="alertwin" class="vgui win hidden" style="z-index:30;width:min(420px,92vw)">
+  <div class="title">STRAFE 1.6<span class="x" data-close="alertwin">×</span></div>
+  <div class="win-body"><p id="alertText"></p></div>
+  <div class="win-foot"><button data-close="alertwin">OK</button></div>
 </div>
 
 <!-- ================= CONSOLE ================= -->

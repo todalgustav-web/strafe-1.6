@@ -143,3 +143,14 @@ nav a:hover { color: #c4b550; }
 .xh-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .xh-code { display: flex; gap: 6px; padding: 0 14px; }
 .xh-code input { flex: 1; font: 11px 'Courier New', monospace !important; }
+
+/* ================= SERVER BROWSER ================= */
+#browser { width: min(680px, 96vw); }
+.mp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mp-row select { display: block; width: 100%; margin-top: 4px; }
+.srv-wrap { background: #3e4637; border: 1px solid; border-color: #292c21 #889180 #889180 #292c21; height: 220px; overflow-y: auto; margin-top: 6px; }
+#srvTable { width: 100%; border-collapse: collapse; }
+#srvTable th { text-align: left; font-weight: normal; color: #a0aa95; padding: 4px 8px; border-bottom: 1px solid #292c21; position: sticky; top: 0; background: #3e4637; }
+#srvTable td { padding: 4px 8px; border-bottom: 1px solid #4c5844; color: #d8ded3; cursor: pointer; width: auto; }
+#srvTable tr:hover td { background: #4c5844; }
+#srvTable tr.sel td { background: #5a6850; color: #c4b550; }

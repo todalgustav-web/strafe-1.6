@@ -30,6 +30,16 @@ Then open http://localhost:8000
 - **Crosshair editor** (main menu → Crosshair): presets, size, gap, thickness, outline, dot, T-style, circle and colour. It also accepts CS:GO console commands like `cl_crosshairsize 3`.
 - After you die, click to spectate your teammates.
 
+## Multiplayer
+
+- **Create Server** hosts a game in your browser. Your browser runs the server: bots, rounds and the bomb. Every empty slot is filled with a bot, and when a friend joins they take a bot's place.
+- **Find Servers** lists every server that is currently being hosted. Select one and press Join (or double-click it), then pick a team.
+- Players connect directly to the host (peer-to-peer WebRTC through [Trystero](https://github.com/dmotz/trystero)). Public Nostr relays are only used to find each other, so no game server or account is needed. That's why it works on GitHub Pages.
+- The host has to keep their tab open. If the host leaves, the server closes.
+- **Network → "This browser only"** lets you test multiplayer with two tabs on one computer, no internet needed.
+- Some school or work networks block peer-to-peer connections. If joining fails, try a home network or a phone hotspot.
+- **Practice vs Bots** is the offline single-player mode.
+
 ## Controls
 
 | Key | Action |
