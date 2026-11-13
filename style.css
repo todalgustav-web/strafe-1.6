@@ -1,0 +1,64 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: Verdana, Tahoma, sans-serif; color: #fff; user-select: none; }
+#game canvas { display: block; }
+.hidden { display: none !important; }
+
+/* ---------- HUD (1.6-style amber) ---------- */
+#hud { position: fixed; inset: 0; pointer-events: none; --hud: rgba(255, 176, 30, .92); }
+#hud, #hud * { text-shadow: 0 0 2px rgba(0,0,0,.8); }
+#crosshair { position: absolute; left: 50%; top: 50%; }
+#crosshair i { position: absolute; background: #3f3; box-shadow: 0 0 1px #000; }
+#crosshair .t, #crosshair .b { width: 2px; height: 8px; left: -1px; }
+#crosshair .l, #crosshair .r { height: 2px; width: 8px; top: -1px; }
+
+#hp, #ammo, #speed { position: absolute; bottom: 18px; color: var(--hud); font-weight: bold; font-size: 34px; letter-spacing: 1px; }
+#hp { left: 24px; }
+#hp .ico { font-size: 30px; margin-right: 10px; }
+#hp.low { color: #ff4030; }
+#ammo { right: 24px; display: flex; align-items: baseline; gap: 10px; }
+#ammo #weaponName { font-size: 14px; opacity: .8; margin-right: 8px; }
+#ammo .sep { opacity: .6; }
+#speed { left: 50%; transform: translateX(-50%); bottom: 70px; font-size: 22px; color: rgba(255,255,255,.8); }
+#speed small { font-size: 11px; margin-left: 4px; opacity: .7; }
+#speed.fast { color: #6f6; }
+#speed.vfast { color: #3cf; }
+
+#score { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 18px; background: rgba(0,0,0,.35); padding: 4px 14px; border-radius: 3px; color: var(--hud); white-space: nowrap; }
+#score .ct b { color: #8cf; }
+#score .tt b { color: #f96; }
+#timer { margin: 0 14px; color: #fff; }
+#alive { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,.75); }
+
+#feed { position: absolute; top: 12px; right: 14px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+#feed div { background: rgba(0,0,0,.45); padding: 3px 9px; font-size: 13px; border-radius: 2px; }
+#feed .me { border: 1px solid rgba(255,60,60,.8); }
+#feed .ct { color: #9cf; } #feed .tt { color: #f96; } #feed .w { color: #ddd; margin: 0 6px; } #feed .hs { color: #f44; margin-left: 4px; }
+
+#center { position: absolute; top: 28%; width: 100%; text-align: center; font-size: 30px; font-weight: bold; color: #fff; opacity: 0; transition: opacity .25s; }
+#center.show { opacity: 1; }
+#center small { display: block; font-size: 15px; font-weight: normal; margin-top: 8px; opacity: .8; }
+
+#dmg { position: absolute; inset: 0; box-shadow: inset 0 0 160px rgba(255,0,0,.85); opacity: 0; }
+
+/* ---------- Menu ---------- */
+#menu { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(40,30,15,.55), rgba(0,0,0,.85)); }
+.panel { width: min(860px, 94vw); max-height: 94vh; overflow: auto; background: rgba(20,18,14,.92); border: 1px solid #5a4a2a; padding: 26px 32px; box-shadow: 0 10px 50px rgba(0,0,0,.6); }
+h1 { margin: 0; font-size: 46px; letter-spacing: 6px; color: #ffb01e; font-family: Impact, 'Arial Black', sans-serif; font-weight: normal; }
+h1 span { color: #fff; font-size: 26px; vertical-align: top; }
+.sub { margin: 4px 0 18px; color: #b9a988; font-size: 13px; }
+#play { width: 100%; padding: 16px; font-size: 20px; letter-spacing: 3px; font-weight: bold; background: #4a5a2a; color: #fff; border: 1px solid #8a9a5a; cursor: pointer; font-family: inherit; }
+#play:hover { background: #5d7034; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 18px; }
+@media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+h3 { margin: 10px 0 8px; font-size: 13px; letter-spacing: 2px; color: #ffb01e; text-transform: uppercase; }
+table { border-collapse: collapse; font-size: 12px; width: 100%; }
+td { padding: 3px 0; color: #ddd; }
+td:first-child { color: #ffd27a; width: 42%; font-weight: bold; }
+.tip { font-size: 12px; color: #aaa; line-height: 1.5; }
+label { display: block; font-size: 12px; color: #ddd; margin-bottom: 10px; }
+label output { float: right; color: #ffd27a; }
+label input[type=range] { width: 100%; accent-color: #ffb01e; }
+label.row { display: flex; justify-content: space-between; align-items: center; }
+label.check { justify-content: flex-start; gap: 8px; cursor: pointer; }
+select { background: #222; color: #fff; border: 1px solid #555; padding: 3px 6px; }
+.foot { margin: 14px 0 0; font-size: 12px; color: #888; text-align: center; }
