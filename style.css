@@ -1,64 +1,124 @@
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: Verdana, Tahoma, sans-serif; color: #fff; user-select: none; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: Tahoma, Verdana, sans-serif; color: #fff; user-select: none; }
 #game canvas { display: block; }
 .hidden { display: none !important; }
 
-/* ---------- HUD (1.6-style amber) ---------- */
-#hud { position: fixed; inset: 0; pointer-events: none; --hud: rgba(255, 176, 30, .92); }
-#hud, #hud * { text-shadow: 0 0 2px rgba(0,0,0,.8); }
-#crosshair { position: absolute; left: 50%; top: 50%; }
-#crosshair i { position: absolute; background: #3f3; box-shadow: 0 0 1px #000; }
-#crosshair .t, #crosshair .b { width: 2px; height: 8px; left: -1px; }
-#crosshair .l, #crosshair .r { height: 2px; width: 8px; top: -1px; }
+/* ================= HUD (GoldSrc amber) ================= */
+#hud { position: fixed; inset: 0; pointer-events: none; --amb: rgba(255, 160, 0, .82); font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif; }
+#crosshair { position: absolute; left: 50%; top: 50%; --cc: #32fa32; }
+#crosshair i { position: absolute; background: var(--cc); }
+#crosshair .t, #crosshair .b { width: 2px; height: 7px; left: -1px; }
+#crosshair .l, #crosshair .r { height: 2px; width: 7px; top: -1px; }
 
-#hp, #ammo, #speed { position: absolute; bottom: 18px; color: var(--hud); font-weight: bold; font-size: 34px; letter-spacing: 1px; }
-#hp { left: 24px; }
-#hp .ico { font-size: 30px; margin-right: 10px; }
-#hp.low { color: #ff4030; }
-#ammo { right: 24px; display: flex; align-items: baseline; gap: 10px; }
-#ammo #weaponName { font-size: 14px; opacity: .8; margin-right: 8px; }
-#ammo .sep { opacity: .6; }
-#speed { left: 50%; transform: translateX(-50%); bottom: 70px; font-size: 22px; color: rgba(255,255,255,.8); }
-#speed small { font-size: 11px; margin-left: 4px; opacity: .7; }
-#speed.fast { color: #6f6; }
-#speed.vfast { color: #3cf; }
+#scope { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 0, transparent 44vh, #000 calc(44vh + 1px)); }
+#scope i { position: absolute; background: #000; }
+#scope .h { left: 0; right: 0; top: 50%; height: 1px; }
+#scope .v { top: 0; bottom: 0; left: 50%; width: 1px; }
 
-#score { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 18px; background: rgba(0,0,0,.35); padding: 4px 14px; border-radius: 3px; color: var(--hud); white-space: nowrap; }
-#score .ct b { color: #8cf; }
-#score .tt b { color: #f96; }
-#timer { margin: 0 14px; color: #fff; }
-#alive { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,.75); }
+.hb { position: absolute; bottom: 14px; color: var(--amb); font-size: 30px; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; }
+.hb svg { width: 26px; height: 26px; }
+#hp { left: 22px; }
+#ap { left: 150px; padding-left: 16px; border-left: 2px solid rgba(255,160,0,.45); }
+#timer { left: 50%; transform: translateX(-50%); }
+#ammo { right: 22px; }
+#ammo .sep { width: 2px; height: 26px; background: rgba(255,160,0,.45); margin: 0 6px; }
+#ammo svg { width: 18px; height: 26px; margin-left: 4px; }
+.hb.low, #hp.low { color: rgba(255, 30, 20, .9); }
+#wname { position: absolute; right: 24px; bottom: 54px; color: rgba(255,160,0,.6); font: bold 12px Tahoma, sans-serif; }
+#money { position: absolute; right: 22px; bottom: 120px; color: var(--amb); font-size: 30px; display: flex; gap: 6px; align-items: baseline; }
+#money .d { font-size: 26px; }
+#money.flashR { color: rgba(255,40,30,.95); }
+#moneyDelta { position: absolute; right: 0; top: 34px; font-size: 22px; opacity: 0; transition: opacity .4s; }
+#moneyDelta.show { opacity: 1; }
+#moneyDelta.plus { color: rgba(70,230,70,.9); } #moneyDelta.minus { color: rgba(255,50,40,.9); }
+#buyicon { position: absolute; left: 22px; top: 48%; color: rgba(70,220,70,.85); width: 40px; height: 40px; }
+#buyicon svg { width: 40px; height: 40px; }
+#speed { position: absolute; left: 50%; transform: translateX(-50%); bottom: 64px; font: bold 18px Tahoma, sans-serif; color: rgba(255,255,255,.75); }
+#speed small { font-size: 10px; opacity: .7; }
+#speed.fast { color: #6f6; } #speed.vfast { color: #3cf; }
 
-#feed { position: absolute; top: 12px; right: 14px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-#feed div { background: rgba(0,0,0,.45); padding: 3px 9px; font-size: 13px; border-radius: 2px; }
-#feed .me { border: 1px solid rgba(255,60,60,.8); }
-#feed .ct { color: #9cf; } #feed .tt { color: #f96; } #feed .w { color: #ddd; margin: 0 6px; } #feed .hs { color: #f44; margin-left: 4px; }
+#radar { z-index: 2; position: absolute; left: 12px; top: 12px; width: 170px; height: 170px; }
+#teamscore { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font: bold 14px Tahoma, sans-serif; display: flex; gap: 18px; background: rgba(0,0,0,.3); padding: 2px 12px; }
+#teamscore .ct { color: #9cf; } #teamscore .tt { color: #f64; }
+#fps { position: absolute; right: 14px; top: 140px; font: 12px 'Courier New', monospace; color: #fff; text-align: right; white-space: pre; }
 
-#center { position: absolute; top: 28%; width: 100%; text-align: center; font-size: 30px; font-weight: bold; color: #fff; opacity: 0; transition: opacity .25s; }
+#feed { position: absolute; top: 10px; right: 12px; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font: bold 13px Tahoma, Verdana, sans-serif; }
+#feed div { background: rgba(0,0,0,.45); padding: 3px 8px; }
+#feed .me { box-shadow: inset 0 0 0 1px rgba(255,40,40,.85); }
+#feed .ct { color: #99ccff; } #feed .tt { color: #ff3f3f; } #feed .w { color: rgba(255,160,0,.95); margin: 0 6px; font-weight: normal; } #feed .hs { color: rgba(255,160,0,.95); margin-left: 5px; }
+
+#center { position: absolute; top: 26%; width: 100%; text-align: center; font: bold 26px Tahoma, Verdana, sans-serif; color: #fff; text-shadow: 1px 1px 2px #000; opacity: 0; transition: opacity .2s; }
 #center.show { opacity: 1; }
-#center small { display: block; font-size: 15px; font-weight: normal; margin-top: 8px; opacity: .8; }
+#cprint { position: absolute; top: 62%; width: 100%; text-align: center; font: bold 15px Tahoma, Verdana, sans-serif; color: #fff; text-shadow: 1px 1px 2px #000; opacity: 0; transition: opacity .3s; }
+#cprint.show { opacity: 1; }
+#dmg { position: absolute; inset: 0; box-shadow: inset 0 0 150px rgba(255,0,0,.85); opacity: 0; }
 
-#dmg { position: absolute; inset: 0; box-shadow: inset 0 0 160px rgba(255,0,0,.85); opacity: 0; }
+/* ================= BUY MENU (1.6 VGUI) ================= */
+#buymenu { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(720px, 96vw); background: rgba(0,0,0,.78); border: 1px solid rgba(255,176,0,.55); color: #ffb000; font: 13px Tahoma, Verdana, sans-serif; }
+.bm-title { padding: 10px 16px; font: bold 20px Tahoma, Verdana, sans-serif; letter-spacing: 1px; border-bottom: 1px solid rgba(255,176,0,.35); display: flex; justify-content: space-between; }
+#bmMoney { color: #8f8; font-size: 16px; }
+.bm-body { display: grid; grid-template-columns: 300px 1fr; min-height: 300px; }
+#bmList { padding: 12px; display: flex; flex-direction: column; gap: 4px; border-right: 1px solid rgba(255,176,0,.25); }
+#bmList div { padding: 6px 10px; border: 1px solid rgba(255,176,0,.35); cursor: pointer; display: flex; justify-content: space-between; }
+#bmList div:hover, #bmList div.sel { background: rgba(255,176,0,.18); }
+#bmList div.na { color: rgba(255,176,0,.38); border-color: rgba(255,176,0,.15); }
+#bmList div .k { color: #fff; margin-right: 8px; }
+#bmList div .p { color: #bfa; }
+#bmList div.na .p { color: rgba(255,100,80,.6); }
+#bmInfo { padding: 14px; }
+#bmPic { width: 100%; height: auto; }
+#bmStats { white-space: pre; font: 12px 'Courier New', monospace; line-height: 1.6; color: #ffcf6a; }
+.bm-foot { padding: 7px 16px; font-size: 11px; color: rgba(255,176,0,.6); border-top: 1px solid rgba(255,176,0,.25); }
 
-/* ---------- Menu ---------- */
-#menu { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(40,30,15,.55), rgba(0,0,0,.85)); }
-.panel { width: min(860px, 94vw); max-height: 94vh; overflow: auto; background: rgba(20,18,14,.92); border: 1px solid #5a4a2a; padding: 26px 32px; box-shadow: 0 10px 50px rgba(0,0,0,.6); }
-h1 { margin: 0; font-size: 46px; letter-spacing: 6px; color: #ffb01e; font-family: Impact, 'Arial Black', sans-serif; font-weight: normal; }
-h1 span { color: #fff; font-size: 26px; vertical-align: top; }
-.sub { margin: 4px 0 18px; color: #b9a988; font-size: 13px; }
-#play { width: 100%; padding: 16px; font-size: 20px; letter-spacing: 3px; font-weight: bold; background: #4a5a2a; color: #fff; border: 1px solid #8a9a5a; cursor: pointer; font-family: inherit; }
-#play:hover { background: #5d7034; }
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 18px; }
-@media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
-h3 { margin: 10px 0 8px; font-size: 13px; letter-spacing: 2px; color: #ffb01e; text-transform: uppercase; }
-table { border-collapse: collapse; font-size: 12px; width: 100%; }
-td { padding: 3px 0; color: #ddd; }
-td:first-child { color: #ffd27a; width: 42%; font-weight: bold; }
-.tip { font-size: 12px; color: #aaa; line-height: 1.5; }
-label { display: block; font-size: 12px; color: #ddd; margin-bottom: 10px; }
-label output { float: right; color: #ffd27a; }
-label input[type=range] { width: 100%; accent-color: #ffb01e; }
-label.row { display: flex; justify-content: space-between; align-items: center; }
-label.check { justify-content: flex-start; gap: 8px; cursor: pointer; }
-select { background: #222; color: #fff; border: 1px solid #555; padding: 3px 6px; }
-.foot { margin: 14px 0 0; font-size: 12px; color: #888; text-align: center; }
+/* ================= SCOREBOARD ================= */
+#scoreboard { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(640px, 94vw); background: rgba(0,0,0,.72); border: 1px solid rgba(255,176,0,.45); padding: 14px 18px; font: 13px Tahoma, Verdana, sans-serif; }
+#scoreboard h2 { margin: 0 0 8px; font-size: 16px; color: #ffb000; font-weight: bold; display: flex; justify-content: space-between; }
+#scoreboard table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+#scoreboard th { text-align: left; font-weight: bold; padding: 4px 6px; border-bottom: 1px solid currentColor; }
+#scoreboard td { padding: 3px 6px; }
+#scoreboard .num { text-align: right; width: 70px; }
+#scoreboard .ct { color: #99ccff; } #scoreboard .tt { color: #ff3f3f; }
+#scoreboard tr.dead td { opacity: .5; }
+#scoreboard tr.me td { background: rgba(255,255,255,.08); }
+
+/* ================= MAIN MENU ================= */
+#mainmenu { position: fixed; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.55) 45%, rgba(0,0,0,.1) 100%); padding: 9vh 7vw; }
+.logo { font: italic 900 64px 'Arial Black', Impact, sans-serif; letter-spacing: 2px; color: #fff; text-shadow: 3px 3px 0 #000; }
+.logo span { font-size: 22px; vertical-align: top; margin-left: 8px; color: #ffb000; font-style: normal; }
+.mm-sub { color: #aaa; font-size: 13px; letter-spacing: 4px; margin: 2px 0 7vh 4px; text-transform: uppercase; }
+nav { display: flex; flex-direction: column; gap: 6px; width: 280px; }
+nav a { font: 18px Tahoma, Verdana, sans-serif; color: #d8ded3; cursor: pointer; padding: 3px 0; }
+nav a:hover { color: #c4b550; }
+#mmStats { position: absolute; left: 7vw; bottom: 6vh; color: #888; font-size: 12px; }
+
+/* ================= VGUI (Steam olive) windows ================= */
+.vgui { background: #4c5844; color: #d8ded3; font: 12px Tahoma, Verdana, sans-serif; border: 1px solid; border-color: #889180 #292c21 #292c21 #889180; }
+.win { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(520px, 94vw); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 6px 30px rgba(0,0,0,.6); }
+.win .title { padding: 6px 10px; font-weight: bold; color: #d8ded3; display: flex; justify-content: space-between; }
+.win .x { cursor: pointer; padding: 0 4px; }
+.win .x:hover { color: #c4b550; }
+.win-body { padding: 8px 14px; overflow: auto; }
+.win-foot { padding: 8px 14px; text-align: right; }
+.vgui button { background: #4c5844; color: #d8ded3; border: 1px solid; border-color: #889180 #292c21 #292c21 #889180; padding: 4px 16px; font: 12px Tahoma, Verdana, sans-serif; cursor: pointer; }
+.vgui button:hover { color: #c4b550; }
+.vgui button:active { border-color: #292c21 #889180 #889180 #292c21; }
+.vgui input[type=text], .vgui select { background: #3e4637; color: #d8ded3; border: 1px solid; border-color: #292c21 #889180 #889180 #292c21; padding: 4px 6px; font: 12px Tahoma, Verdana, sans-serif; outline: none; }
+.vgui label { display: block; margin-bottom: 10px; }
+.vgui label input[type=text] { display: block; width: 100%; margin-top: 4px; }
+.vgui label output { float: right; color: #c4b550; }
+.vgui label input[type=range] { width: 100%; accent-color: #c4b550; }
+.vgui label.row { display: flex; justify-content: space-between; align-items: center; }
+.vgui label.check { justify-content: flex-start; gap: 8px; cursor: pointer; }
+.vgui table { width: 100%; border-collapse: collapse; }
+.vgui td { padding: 3px 0; border-bottom: 1px solid #3e4637; }
+.vgui td:first-child { color: #c4b550; width: 45%; }
+.vgui .note { color: #a0aa95; line-height: 1.5; }
+
+#console { width: min(760px, 96vw); height: min(520px, 80vh); z-index: 20; }
+#conOut { flex: 1; margin: 0 10px; background: #3e4637; border: 1px solid; border-color: #292c21 #889180 #889180 #292c21; padding: 6px 8px; overflow-y: auto; font: 12px 'Courier New', monospace; white-space: pre-wrap; user-select: text; }
+#conOut .err { color: #ff8a6a; } #conOut .cmd { color: #c4b550; } #conOut .dim { color: #a0aa95; }
+.conRow { display: flex; gap: 6px; padding: 8px 10px 10px; }
+.conRow input { flex: 1; font-family: 'Courier New', monospace !important; }
+#conSug { position: absolute; left: 10px; top: calc(100% - 6px); background: #3e4637; border: 1px solid #292c21; max-height: 200px; overflow: auto; min-width: 260px; font: 12px 'Courier New', monospace; }
+#conSug div { padding: 2px 8px; }
+#conSug div.sel { background: #4c5844; color: #c4b550; }

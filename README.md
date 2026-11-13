@@ -26,13 +26,25 @@ Then open http://localhost:8000
 | Key | Action |
 |---|---|
 | W A S D | Move |
-| Mouse | Aim; left click shoots, right click is a knife stab |
+| Mouse / arrow keys | Aim / turn; left click shoots |
+| Right mouse | Scope (Scout, AWP, SG550, AUG) or knife stab |
+| B | Buy menu (in the CT spawn buy zone, first 90 s of a round) |
+| Tab | Scoreboard |
+| ~ (key left of 1) | Console (type `help`) |
 | Space / mouse wheel | Jump |
 | Ctrl / C | Crouch |
 | Shift | Walk |
 | R | Reload |
-| 1 / 2 / 3, Q | Rifle / pistol / knife, last weapon |
-| Esc | Pause and settings |
+| 1 / 2 / 3, Q | Primary / pistol / knife, last weapon |
+| Esc | Main menu |
+
+## Money and buying
+
+You start with $800 and a pistol. Kills pay $300, a round win $3250 and a loss $1400 or more. Weapons are kept if you survive the round.
+
+## Console
+
+Some useful commands: `sv_airaccelerate 100`, `sv_gravity 400`, `bot_add`, `bot_kick`, `bot_difficulty 2`, `mp_restartgame 1`, `cl_showfps 1`, `buy awp`. Cheats need `sv_cheats 1` first: `noclip`, `god`, `impulse 101`, `give ak47`.
 
 ## Bunny hopping
 

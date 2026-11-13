@@ -12,55 +12,109 @@
 <body>
 <div id="game"></div>
 
+<!-- ================= HUD ================= -->
 <div id="hud" class="hidden">
+  <canvas id="radar" width="170" height="170"></canvas>
   <div id="crosshair"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i></div>
-  <div id="score"><span class="ct">CT <b id="ctScore">0</b></span> <span id="timer">1:55</span> <span class="tt"><b id="tScore">0</b> T</span></div>
-  <div id="alive"></div>
-  <div id="hp"><span class="ico">✚</span><span id="hpVal">100</span></div>
-  <div id="speed"><span id="speedVal">0</span><small>u/s</small></div>
-  <div id="ammo"><span id="weaponName">AK-47</span><span id="magVal">30</span><span class="sep">|</span><span id="resVal">90</span></div>
+  <div id="scope" class="hidden"><i class="h"></i><i class="v"></i></div>
+  <div id="teamscore"><span class="ct">CT <b id="ctScore">0</b></span><span class="tt"><b id="tScore">0</b> T</span></div>
   <div id="feed"></div>
+  <div id="fps"></div>
   <div id="center"></div>
+  <div id="cprint"></div>
+  <div id="buyicon" class="hidden" title="Buy zone">
+    <svg viewBox="0 0 24 24"><path d="M2 3h3l3 12h11l3-9H7" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="10" cy="20" r="2" fill="currentColor"/><circle cx="18" cy="20" r="2" fill="currentColor"/></svg>
+  </div>
+  <div id="money"><span class="d">$</span><span id="moneyVal">800</span><div id="moneyDelta"></div></div>
+  <div id="speed"><span id="speedVal">0</span><small> u/s</small></div>
+  <div class="hb" id="hp"><svg viewBox="0 0 24 24"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="currentColor"/></svg><span id="hpVal">100</span></div>
+  <div class="hb" id="ap"><svg viewBox="0 0 24 24"><path d="M12 2l9 3v7c0 5-4 9-9 10C7 21 3 17 3 12V5z" fill="currentColor"/></svg><span id="apVal">0</span></div>
+  <div class="hb" id="timer"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 6v6l4 3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg><span id="timerVal">1:55</span></div>
+  <div class="hb" id="ammo"><span id="magVal">12</span><span class="sep"></span><span id="resVal">24</span><svg viewBox="0 0 24 24"><path d="M9 22V9c0-4 3-7 3-7s3 3 3 7v13z" fill="currentColor"/></svg></div>
+  <div id="wname"></div>
   <div id="dmg"></div>
 </div>
 
-<div id="menu">
-  <div class="panel">
-    <h1>STRAFE <span>1.6</span></h1>
-    <p class="sub">de_dunes · classic two-site desert map · bunny hopping · vs bots</p>
-    <button id="play">CLICK TO PLAY</button>
-    <div class="cols">
-      <div>
-        <h3>Controls</h3>
-        <table>
-          <tr><td>W A S D</td><td>Move</td></tr>
-          <tr><td>Mouse</td><td>Aim · LMB shoot · RMB knife stab</td></tr>
-          <tr><td>Space / Wheel</td><td>Jump</td></tr>
-          <tr><td>Ctrl / C</td><td>Crouch (crouch-jump onto crates)</td></tr>
-          <tr><td>Shift</td><td>Walk</td></tr>
-          <tr><td>R</td><td>Reload</td></tr>
-          <tr><td>1 / 2 / 3 · Q</td><td>Rifle / Pistol / Knife · last</td></tr>
-          <tr><td>Esc</td><td>Pause / settings</td></tr>
-        </table>
-        <h3>Bhop tips</h3>
-        <p class="tip">Don't hold W in the air. Hold <b>A</b> while turning the mouse left, <b>D</b> while turning right, and jump the instant you land (hold Space with auto-bhop, or spam the scroll wheel).</p>
-      </div>
-      <div>
-        <h3>Settings</h3>
-        <label>Sensitivity <output id="sensOut"></output><input id="sens" type="range" min="0.3" max="8" step="0.1"></label>
-        <label>Field of view <output id="fovOut"></output><input id="fov" type="range" min="70" max="115" step="1"></label>
-        <label>sv_airaccelerate <output id="aaOut"></output><input id="aa" type="range" min="10" max="150" step="5"></label>
-        <label>Bots <output id="botsOut"></output><input id="bots" type="range" min="1" max="10" step="1"></label>
-        <label>Volume <output id="volOut"></output><input id="vol" type="range" min="0" max="1" step="0.05"></label>
-        <label class="row">Difficulty
-          <select id="diff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select>
-        </label>
-        <label class="row check"><input id="autobhop" type="checkbox"> Auto-bhop (hold Space)</label>
-        <p class="tip">Bot count applies from the next round.</p>
-      </div>
+<!-- ================= BUY MENU ================= -->
+<div id="buymenu" class="hidden">
+  <div class="bm-title">BUY ITEM <span id="bmMoney"></span></div>
+  <div class="bm-body">
+    <div id="bmList"></div>
+    <div id="bmInfo">
+      <canvas id="bmPic" width="300" height="120"></canvas>
+      <div id="bmStats"></div>
     </div>
-    <p class="foot" id="stats"></p>
   </div>
+  <div class="bm-foot">Press the number keys to buy · 0 to go back / close · B to close</div>
+</div>
+
+<!-- ================= SCOREBOARD ================= -->
+<div id="scoreboard" class="hidden"></div>
+
+<!-- ================= MAIN MENU ================= -->
+<div id="mainmenu">
+  <div class="logo">STRAFE<span>1.6</span></div>
+  <div class="mm-sub">de_dunes</div>
+  <nav>
+    <a id="mmResume" class="hidden">Resume Game</a>
+    <a id="mmNew">New Game</a>
+    <a id="mmOptions">Options</a>
+    <a id="mmControls">Controls</a>
+    <a id="mmConsole">Console</a>
+  </nav>
+  <div id="mmStats"></div>
+</div>
+
+<!-- ================= OPTIONS ================= -->
+<div id="options" class="vgui win hidden">
+  <div class="title">Options<span class="x" data-close="options">×</span></div>
+  <div class="win-body">
+    <label>Name<input id="optName" type="text" maxlength="24"></label>
+    <label>Mouse sensitivity <output id="sensOut"></output><input id="sens" type="range" min="0.3" max="8" step="0.1"></label>
+    <label>Field of view <output id="fovOut"></output><input id="fov" type="range" min="70" max="115" step="1"></label>
+    <label>sv_airaccelerate <output id="aaOut"></output><input id="aa" type="range" min="10" max="150" step="5"></label>
+    <label>Bots <output id="botsOut"></output><input id="bots" type="range" min="1" max="10" step="1"></label>
+    <label>Volume <output id="volOut"></output><input id="vol" type="range" min="0" max="1" step="0.05"></label>
+    <label class="row">Bot difficulty
+      <select id="diff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select>
+    </label>
+    <label class="row check"><input id="autobhop" type="checkbox"> Auto-bhop (hold Space)</label>
+    <label class="row check"><input id="radio" type="checkbox"> Radio voice</label>
+    <p class="note">More settings are available in the console (press ~ or the key left of 1). Type <b>help</b>.</p>
+  </div>
+  <div class="win-foot"><button data-close="options">OK</button></div>
+</div>
+
+<!-- ================= CONTROLS ================= -->
+<div id="controls" class="vgui win hidden">
+  <div class="title">Controls<span class="x" data-close="controls">×</span></div>
+  <div class="win-body">
+    <table>
+      <tr><td>W A S D</td><td>Move</td></tr>
+      <tr><td>Mouse / Arrow keys</td><td>Look / turn</td></tr>
+      <tr><td>Left mouse</td><td>Fire</td></tr>
+      <tr><td>Right mouse</td><td>Scope (sniper rifles) · knife stab</td></tr>
+      <tr><td>Space / Mouse wheel</td><td>Jump</td></tr>
+      <tr><td>Ctrl / C</td><td>Duck</td></tr>
+      <tr><td>Shift</td><td>Walk</td></tr>
+      <tr><td>R</td><td>Reload</td></tr>
+      <tr><td>1 / 2 / 3 / Q</td><td>Primary / Pistol / Knife / Last weapon</td></tr>
+      <tr><td>B</td><td>Buy menu (in buy zone)</td></tr>
+      <tr><td>Tab</td><td>Scoreboard</td></tr>
+      <tr><td>~ (key left of 1)</td><td>Console</td></tr>
+      <tr><td>Esc</td><td>Main menu</td></tr>
+    </table>
+    <p class="note"><b>Bunny hopping:</b> let go of W in the air, hold A while moving the mouse (or turning with ←) left, D while moving right, and jump the instant you land.</p>
+  </div>
+  <div class="win-foot"><button data-close="controls">OK</button></div>
+</div>
+
+<!-- ================= CONSOLE ================= -->
+<div id="console" class="vgui win hidden">
+  <div class="title">Console<span class="x" data-close="console">×</span></div>
+  <div id="conOut"></div>
+  <div class="conRow"><input id="conIn" type="text" spellcheck="false" autocomplete="off"><button id="conSubmit">Submit</button></div>
+  <div id="conSug" class="hidden"></div>
 </div>
 
 <script type="module" src="game.js"></script>
