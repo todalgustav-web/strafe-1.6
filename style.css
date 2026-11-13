@@ -5,10 +5,7 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-f
 
 /* ================= HUD (GoldSrc amber) ================= */
 #hud { position: fixed; inset: 0; pointer-events: none; --amb: rgba(255, 160, 0, .82); font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif; }
-#crosshair { position: absolute; left: 50%; top: 50%; --cc: #32fa32; }
-#crosshair i { position: absolute; background: var(--cc); }
-#crosshair .t, #crosshair .b { width: 2px; height: 7px; left: -1px; }
-#crosshair .l, #crosshair .r { height: 2px; width: 7px; top: -1px; }
+#xh { position: absolute; left: 50%; top: 50%; width: 200px; height: 200px; margin: -100px 0 0 -100px; }
 
 #scope { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 0, transparent 44vh, #000 calc(44vh + 1px)); }
 #scope i { position: absolute; background: #000; }
@@ -122,3 +119,27 @@ nav a:hover { color: #c4b550; }
 #conSug { position: absolute; left: 10px; top: calc(100% - 6px); background: #3e4637; border: 1px solid #292c21; max-height: 200px; overflow: auto; min-width: 260px; font: 12px 'Courier New', monospace; }
 #conSug div { padding: 2px 8px; }
 #conSug div.sel { background: #4c5844; color: #c4b550; }
+
+#timer.planted::after { content: 'C4'; color: rgba(255,40,30,.95); animation: blink .6s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+#teamtag { position: absolute; left: 22px; bottom: 56px; font: bold 12px Tahoma, sans-serif; }
+#teamtag.ct { color: #99ccff; } #teamtag.tt { color: #ff6a4a; }
+#bombicon, #kiticon { position: absolute; left: 22px; top: 56%; padding: 3px 8px; font: bold 14px 'Arial Black', sans-serif; color: rgba(255,160,0,.9); border: 2px solid rgba(255,160,0,.6); }
+#bombicon { animation: blink 1.2s steps(2) infinite; color: rgba(70,230,70,.9); border-color: rgba(70,230,70,.6); }
+#kiticon { top: 62%; }
+#prog { position: absolute; left: 50%; top: 60%; transform: translateX(-50%); width: 320px; text-align: center; font: bold 13px Tahoma, sans-serif; color: #fff; text-shadow: 1px 1px 2px #000; }
+#prog .pbox { margin-top: 6px; height: 12px; border: 1px solid rgba(255,160,0,.8); background: rgba(0,0,0,.5); }
+#progBar { height: 100%; width: 0; background: rgba(255,160,0,.85); }
+#spec { position: absolute; bottom: 90px; width: 100%; text-align: center; font: 15px Tahoma, sans-serif; color: #fff; text-shadow: 1px 1px 2px #000; }
+#spec .ct { color: #99ccff; } #spec .tt { color: #ff6a4a; }
+.teams { display: flex; flex-direction: column; gap: 8px; padding: 14px; }
+.teams button { text-align: left; padding: 10px 14px; font-size: 15px; }
+.teams button b { color: #c4b550; margin-right: 10px; }
+.teams button small { display: block; margin-top: 4px; color: #a0aa95; font-size: 11px; }
+#xhwin { width: min(640px, 96vw); }
+#xhPreview { margin: 0 10px; border: 1px solid; border-color: #292c21 #889180 #889180 #292c21; width: calc(100% - 20px); height: auto; image-rendering: pixelated; }
+.xh-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.xh-presets button { padding: 3px 9px; }
+.xh-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.xh-code { display: flex; gap: 6px; padding: 0 14px; }
+.xh-code input { flex: 1; font: 11px 'Courier New', monospace !important; }

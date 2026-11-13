@@ -15,7 +15,7 @@
 <!-- ================= HUD ================= -->
 <div id="hud" class="hidden">
   <canvas id="radar" width="170" height="170"></canvas>
-  <div id="crosshair"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i></div>
+  <canvas id="xh" width="200" height="200"></canvas>
   <div id="scope" class="hidden"><i class="h"></i><i class="v"></i></div>
   <div id="teamscore"><span class="ct">CT <b id="ctScore">0</b></span><span class="tt"><b id="tScore">0</b> T</span></div>
   <div id="feed"></div>
@@ -32,6 +32,11 @@
   <div class="hb" id="timer"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 6v6l4 3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg><span id="timerVal">1:55</span></div>
   <div class="hb" id="ammo"><span id="magVal">12</span><span class="sep"></span><span id="resVal">24</span><svg viewBox="0 0 24 24"><path d="M9 22V9c0-4 3-7 3-7s3 3 3 7v13z" fill="currentColor"/></svg></div>
   <div id="wname"></div>
+  <div id="teamtag"></div>
+  <div id="bombicon" class="hidden">C4</div>
+  <div id="kiticon" class="hidden">KIT</div>
+  <div id="prog" class="hidden"><div id="progLabel"></div><div class="pbox"><div id="progBar"></div></div></div>
+  <div id="spec" class="hidden"></div>
   <div id="dmg"></div>
 </div>
 
@@ -58,7 +63,9 @@
   <nav>
     <a id="mmResume" class="hidden">Resume Game</a>
     <a id="mmNew">New Game</a>
+    <a id="mmTeam" class="hidden">Change Team</a>
     <a id="mmOptions">Options</a>
+    <a id="mmCrosshair">Crosshair</a>
     <a id="mmControls">Controls</a>
     <a id="mmConsole">Console</a>
   </nav>
@@ -73,13 +80,14 @@
     <label>Mouse sensitivity <output id="sensOut"></output><input id="sens" type="range" min="0.3" max="8" step="0.1"></label>
     <label>Field of view <output id="fovOut"></output><input id="fov" type="range" min="70" max="115" step="1"></label>
     <label>sv_airaccelerate <output id="aaOut"></output><input id="aa" type="range" min="10" max="150" step="5"></label>
-    <label>Bots <output id="botsOut"></output><input id="bots" type="range" min="1" max="10" step="1"></label>
+    <label>Team size <output id="botsOut"></output><input id="bots" type="range" min="1" max="5" step="1"></label>
     <label>Volume <output id="volOut"></output><input id="vol" type="range" min="0" max="1" step="0.05"></label>
     <label class="row">Bot difficulty
       <select id="diff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select>
     </label>
     <label class="row check"><input id="autobhop" type="checkbox"> Auto-bhop (hold Space)</label>
     <label class="row check"><input id="radio" type="checkbox"> Radio voice</label>
+    <p><button id="optXh">Edit crosshair…</button></p>
     <p class="note">More settings are available in the console (press ~ or the key left of 1). Type <b>help</b>.</p>
   </div>
   <div class="win-foot"><button data-close="options">OK</button></div>
@@ -99,7 +107,10 @@
       <tr><td>Shift</td><td>Walk</td></tr>
       <tr><td>R</td><td>Reload</td></tr>
       <tr><td>1 / 2 / 3 / Q</td><td>Primary / Pistol / Knife / Last weapon</td></tr>
-      <tr><td>B</td><td>Buy menu (in buy zone)</td></tr>
+      <tr><td>B</td><td>Buy menu (spawn, freeze time + 20 s)</td></tr>
+      <tr><td>E</td><td>Plant bomb (T, at site A) · Defuse (CT, at the bomb)</td></tr>
+      <tr><td>5 / G</td><td>Select C4 / drop the bomb</td></tr>
+      <tr><td>M</td><td>Change team</td></tr>
       <tr><td>Tab</td><td>Scoreboard</td></tr>
       <tr><td>~ (key left of 1)</td><td>Console</td></tr>
       <tr><td>Esc</td><td>Main menu</td></tr>
@@ -107,6 +118,25 @@
     <p class="note"><b>Bunny hopping:</b> let go of W in the air, hold A while moving the mouse (or turning with ←) left, D while moving right, and jump the instant you land.</p>
   </div>
   <div class="win-foot"><button data-close="controls">OK</button></div>
+</div>
+
+<!-- ================= TEAM MENU ================= -->
+<div id="teammenu" class="vgui win hidden">
+  <div class="title">Select a team<span class="x" data-close="teammenu">×</span></div>
+  <div class="win-body teams">
+    <button data-team="T"><b>1</b> Terrorist Forces<small>Plant the bomb at site A or eliminate the Counter-Terrorists.</small></button>
+    <button data-team="CT"><b>2</b> Counter-Terrorist Forces<small>Defend site A, defuse the bomb or eliminate the Terrorists.</small></button>
+    <button data-team="auto"><b>5</b> Auto-select</button>
+  </div>
+</div>
+
+<!-- ================= CROSSHAIR EDITOR ================= -->
+<div id="xhwin" class="vgui win hidden">
+  <div class="title">Crosshair<span class="x" data-close="xhwin">×</span></div>
+  <canvas id="xhPreview" width="480" height="140"></canvas>
+  <div class="win-body" id="xhBody"></div>
+  <div class="xh-code"><input id="xhCode" type="text" spellcheck="false"><button id="xhCopy">Copy</button><button id="xhApply">Apply</button></div>
+  <div class="win-foot"><button data-close="xhwin">OK</button></div>
 </div>
 
 <!-- ================= CONSOLE ================= -->
