@@ -2393,12 +2393,22 @@ function netTick(dt) {
     else if (net.myId >= 0 && quiet > 12000) netStop(false, 'Lost connection to the server.');
   }
 }
-// keep a hosted game running (slowly) when its tab is in the background
-setInterval(() => {
-  if (!document.hidden || !online() || !started) return;
-  for (let i = 0; i < 10; i++) physicsTick(TICK);
-  update(0.1);
-}, 100);
+// Keep an online game running when its tab is in the background or covered.
+// Browsers stop requestAnimationFrame there and slow normal timers to 1/s, but
+// messages from a Web Worker keep arriving, so a worker drives the simulation.
+let lastFrameAt = performance.now(), bgLast = performance.now();
+function backgroundTick() {
+  const now = performance.now();
+  const dt = Math.min(0.25, (now - bgLast) / 1000); bgLast = now;
+  if (!online() || !started || now - lastFrameAt < 200 || dt <= 0) return;
+  for (let t = 0; t < dt - 1e-6; t += TICK) physicsTick(TICK);
+  update(dt);
+}
+try {
+  const src = 'setInterval(() => postMessage(0), 50);';
+  const wk = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+  wk.onmessage = backgroundTick;
+} catch { setInterval(backgroundTick, 50); }
 
 /* ---------------- lobby UI ---------------- */
 $('mmFind').onclick = () => openBrowser();
@@ -2557,6 +2567,7 @@ function render(dt) {
 
 function frame(now) {
   requestAnimationFrame(frame);
+  lastFrameAt = performance.now(); bgLast = lastFrameAt;
   const dt = Math.min(0.1, (now - last) / 1000); last = now;
   if (running || (online() && started)) {
     acc += dt;
