@@ -29,6 +29,10 @@
   <div class="hb" id="timer"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 6v6l4 3" fill="none" stroke="currentColor" stroke-width="2.6"/></svg><span id="timerVal">1:55</span></div>
   <div class="hb" id="ammo"><span id="magVal">12</span><span class="sep"></span><span id="resVal">24</span><svg viewBox="0 0 24 24"><path d="M9 22V9c0-4 3-7 3-7s3 3 3 7v13z" fill="currentColor"/></svg></div>
   <div id="wname"></div>
+  <div id="nadesHud"></div>
+  <div id="chat"></div>
+  <div id="radiomenu" class="hidden"></div>
+  <div id="flashOv"></div>
   <div id="teamtag"></div>
   <div id="bombicon" class="hidden">C4</div>
   <div id="kiticon" class="hidden">KIT</div>
@@ -59,8 +63,8 @@
   <div class="mm-sub">de_dunes</div>
   <nav>
     <a id="mmResume" class="hidden">Resume Game</a>
-    <a id="mmFind">Find Servers</a>
-    <a id="mmCreate">Create Server</a>
+    <a id="mmFind">Find LAN Servers</a>
+    <a id="mmCreate">Create LAN Server</a>
     <a id="mmNew">Practice vs Bots</a>
     <a id="mmLeave" class="hidden">Disconnect</a>
     <a id="mmTeam" class="hidden">Change Team</a>
@@ -87,6 +91,12 @@
     </label>
     <label class="row check"><input id="autobhop" type="checkbox"> Auto-bhop (hold Space)</label>
     <label class="row check"><input id="radio" type="checkbox"> Radio voice</label>
+    <fieldset class="tp"><legend>Trackpad</legend>
+      <label class="row check"><input id="trackpad" type="checkbox"> Trackpad mode</label>
+      <label>Trackpad acceleration <output id="tpaccelOut"></output><input id="tpaccel" type="range" min="0" max="3" step="0.1"></label>
+      <label class="row check"><input id="aimassist" type="checkbox"> Light aim assist (trackpad mode)</label>
+      <p class="note">In trackpad mode, scrolling no longer jumps (use Space), <b>F</b> fires and <b>V</b> scopes / knife-stabs, so you never have to click while moving your finger. Duck with <b>Ctrl</b> (since you fire with F, the Mac Ctrl + click = right-click problem doesn't matter).</p>
+    </fieldset>
     <p><button id="optXh">Edit crosshair…</button></p>
     <p class="note">More settings are available in the console (press ~ or the key left of 1). Type <b>help</b>.</p>
   </div>
@@ -103,13 +113,16 @@
       <tr><td>Left mouse</td><td>Fire</td></tr>
       <tr><td>Right mouse</td><td>Scope (sniper rifles) · knife stab</td></tr>
       <tr><td>Space / Mouse wheel</td><td>Jump</td></tr>
-      <tr><td>Ctrl / C</td><td>Duck</td></tr>
+      <tr><td>Ctrl</td><td>Duck</td></tr>
       <tr><td>Shift</td><td>Walk</td></tr>
       <tr><td>R</td><td>Reload</td></tr>
-      <tr><td>1 / 2 / 3 / Q</td><td>Primary / Pistol / Knife / Last weapon</td></tr>
+      <tr><td>1 / 2 / 3 / 4 / 5 / Q</td><td>Primary / Pistol / Knife / Grenades / C4 / Last weapon</td></tr>
+      <tr><td>F / V (trackpad mode)</td><td>Fire / scope or knife stab</td></tr>
       <tr><td>B</td><td>Buy menu (spawn, freeze time + 20 s)</td></tr>
-      <tr><td>E</td><td>Plant bomb (T, at site A) · Defuse (CT, at the bomb)</td></tr>
-      <tr><td>5 / G</td><td>Select C4 / drop the bomb</td></tr>
+      <tr><td>E</td><td>Plant bomb (T, at site A or B) · Defuse (CT) · Pick up the gun you look at</td></tr>
+      <tr><td>G</td><td>Drop your weapon (or the bomb)</td></tr>
+      <tr><td>Z / X / C</td><td>Radio commands (bot teammates obey: Follow me, Hold, Go go go…)</td></tr>
+      <tr><td>T</td><td>Spray logo</td></tr>
       <tr><td>M</td><td>Change team</td></tr>
       <tr><td>Tab</td><td>Scoreboard</td></tr>
       <tr><td>~ (key left of 1)</td><td>Console</td></tr>
@@ -142,21 +155,21 @@
 
 <!-- ================= MULTIPLAYER ================= -->
 <div id="browser" class="vgui win hidden">
-  <div class="title">Find Servers<span class="x" data-close="browser">×</span></div>
+  <div class="title">Find LAN Servers<span class="x" data-close="browser">×</span></div>
   <div class="win-body">
     <div class="mp-row">
       <label>Your name<input id="mpName" type="text" maxlength="24"></label>
-      <label>Network<select id="mpNet"><option value="online">Internet</option><option value="local">This browser only (test with 2 tabs)</option></select></label>
+      <label>Network<select id="mpNet"><option value="online">LAN (same Wi-Fi / network)</option><option value="local">This browser only (test with 2 tabs)</option></select></label>
     </div>
     <div class="srv-wrap"><table id="srvTable"><thead><tr><th>Server</th><th>Players</th><th>Map</th><th>Score</th></tr></thead><tbody id="srvList"></tbody></table></div>
     <p id="srvStatus" class="note"></p>
-    <p class="note">Servers are hosted by other players' browsers. Double-click a server or select it and press Join. Bots fill every empty slot.</p>
+    <p class="note">LAN games: only servers on the same Wi-Fi / network as you are shown. Servers are hosted by other players' browsers. Double-click a server or select it and press Join. Bots fill every empty slot.</p>
   </div>
   <div class="win-foot"><button id="srvRefresh">Refresh</button> <button id="srvJoin">Join</button> <button data-close="browser">Close</button></div>
 </div>
 
 <div id="create" class="vgui win hidden">
-  <div class="title">Create Server<span class="x" data-close="create">×</span></div>
+  <div class="title">Create LAN Server<span class="x" data-close="create">×</span></div>
   <div class="win-body">
     <label>Server name<input id="crName" type="text" maxlength="32"></label>
     <label>Players per team <output id="crSizeOut"></output><input id="crSize" type="range" min="1" max="5" step="1"></label>
@@ -164,7 +177,7 @@
       <select id="crDiff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select>
     </label>
     <label class="row">Network
-      <select id="crNet"><option value="online">Internet</option><option value="local">This browser only (test with 2 tabs)</option></select>
+      <select id="crNet"><option value="online">LAN (same Wi-Fi / network)</option><option value="local">This browser only (test with 2 tabs)</option></select>
     </label>
     <p class="note">Your browser runs the server. Bots fill every empty slot, and a bot steps aside when a player joins. Keep this tab open (and preferably visible) while people are playing.</p>
   </div>

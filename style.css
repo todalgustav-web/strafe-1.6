@@ -154,3 +154,15 @@ nav a:hover { color: #c4b550; }
 #srvTable td { padding: 4px 8px; border-bottom: 1px solid #4c5844; color: #d8ded3; cursor: pointer; width: auto; }
 #srvTable tr:hover td { background: #4c5844; }
 #srvTable tr.sel td { background: #5a6850; color: #c4b550; }
+
+.vgui fieldset.tp { border: 1px solid #889180; padding: 6px 10px 2px; margin: 6px 0 10px; }
+.vgui fieldset.tp legend { color: #c4b550; padding: 0 4px; }
+
+/* ---- grenades / radio / chat ---- */
+#flashOv { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+#nadesHud { position: absolute; right: 24px; bottom: 72px; color: rgba(255,160,0,.75); font: bold 13px Tahoma, Verdana, sans-serif; letter-spacing: 1px; }
+#chat { position: absolute; left: 22px; bottom: 120px; display: flex; flex-direction: column; gap: 3px; font: bold 13px Tahoma, Verdana, sans-serif; color: #fff; text-shadow: 1px 1px 1px #000; max-width: 46vw; }
+#chat .ct { color: #99ccff; } #chat .tt { color: #ff3f3f; }
+#radiomenu { position: absolute; left: 18px; top: 36%; font: 14px Tahoma, Verdana, sans-serif; color: #fff; text-shadow: 1px 1px 1px #000; line-height: 1.6; }
+#radiomenu b { display: block; color: #ffb000; margin-bottom: 4px; }
+#radiomenu span { color: #ffb000; }
